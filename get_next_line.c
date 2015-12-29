@@ -6,7 +6,7 @@
 /*   By: ademenet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/21 09:53:51 by ademenet          #+#    #+#             */
-/*   Updated: 2015/12/29 18:55:31 by ademenet         ###   ########.fr       */
+/*   Updated: 2015/12/29 19:08:39 by ademenet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,5 +14,12 @@
 
 int		get_next_line(int const fd, char **line)
 {
-	while (read(fd, *line, RD_ONLY))
+	char	buf[BUFF_SIZE];
+	int		n;
+
+	read(fd, buf, BUFF_SIZE);
+	n = 0;
+	while (buf[n] != '\n')
+		n++;
+
 }
