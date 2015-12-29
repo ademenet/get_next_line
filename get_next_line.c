@@ -6,10 +6,13 @@
 /*   By: ademenet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/21 09:53:51 by ademenet          #+#    #+#             */
-/*   Updated: 2015/12/21 09:54:27 by ademenet         ###   ########.fr       */
+/*   Updated: 2015/12/29 18:55:31 by ademenet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "get_next_line.h"
+
 int		get_next_line(int const fd, char **line)
 {
+	while (read(fd, *line, RD_ONLY))
 }
