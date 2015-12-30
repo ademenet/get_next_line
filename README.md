@@ -1,6 +1,12 @@
 # get_next_line
 
-The function returns the line read from the file descriptor. Characters followed by `'\n'` (ascii code `0x0a`) or by an End Of File (`E0F`) will be considered as a line.
+#### Synopsis
+
+int		get_next_line(int const fd, char **line);
+
+#### Description
+
+The function returns the line read from the file descriptor, `fd`. Characters followed by `'\n'` (ascii code `0x0a`) or by an End Of File (`E0F`) will be considered as a line. Each lines are stocked in `char **line`.
 
 #### Return value
 
