@@ -2,7 +2,7 @@
 
 #### Synopsis
 
-int		get_next_line(int const fd, char **line);
+`int		get_next_line(int const fd, char **line)`
 
 #### Description
 
