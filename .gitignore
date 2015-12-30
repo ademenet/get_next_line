@@ -1,2 +1,4 @@
+test_gnl
+*.o
 a.out
 *.swp

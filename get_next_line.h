@@ -6,7 +6,7 @@
 /*   By: ademenet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/21 09:54:44 by ademenet          #+#    #+#             */
-/*   Updated: 2015/12/29 18:55:12 by ademenet         ###   ########.fr       */
+/*   Updated: 2015/12/30 10:07:58 by ademenet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <sys/uio.h>
 # include <unistd.h>
 # include <stdlib.h>
+# include "libft/libft.h"
 
 int		get_next_line(int const fd, char **line);
 #endif
