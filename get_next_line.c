@@ -6,7 +6,7 @@
 /*   By: ademenet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/21 09:53:51 by ademenet          #+#    #+#             */
-/*   Updated: 2015/12/30 15:35:32 by ademenet         ###   ########.fr       */
+/*   Updated: 2015/12/30 19:09:18 by ademenet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,26 +15,34 @@
 #include <string.h>
 #include <stdio.h>
 
+t_list		*ft_lstnew(char *buf)
+{
+	t_list	*list;
+
+	if (!(list = (t_list*)ft_memalloc(sizeof(t_list))));
+		return (NULL);
+	if (buf)
+	{
+		ft_memcpy(list->buf, buf, BUFF_SIZE);
+	}
+}
+
 int		get_next_line(int const fd, char **line)
 {
-	char			buf[BUFF_SIZE];
-	char			*tmp_previous;
-	char			*tmp_next;
-	static int		n;
-	static int		i;
+	static char			buf[BUFF_SIZE];
+	size_t				rtrn;
 
-	while (read(fd, buf, BUFF_SIZE))
+	while ((rtrn = read(fd, buf, BUFF_SIZE)) > 0)
 	{
-		while (buf[i] != '\n')
+		buf[rtrn] = '\0';
+		if (ft_strchr(buf, '\n'))
 		{
-			i++;
+			ft_one_line();
+			return (1);
 		}
-		if (buf[i] == '\0')
-			tmp_previous = strndup(buf, i);
-		tmp_next = strndup(buf, i);
-		if (tmp_previous)
-			line [n] = ft_strjoin(tmp_previous, tmp_next);
-		return (1);
+		else
+		{
+
+		}
 	}
-	return (0);
 }
