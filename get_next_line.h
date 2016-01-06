@@ -6,7 +6,7 @@
 /*   By: ademenet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/21 09:54:44 by ademenet          #+#    #+#             */
-/*   Updated: 2016/01/04 13:58:06 by ademenet         ###   ########.fr       */
+/*   Updated: 2016/01/06 12:17:39 by ademenet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,12 @@
 # include <stdlib.h>
 # include "libft/libft.h"
 
-typedef struct		s_list
+typedef struct			s_listfd
 {
-	int				fd;
-	char			save[BUFF_SIZE];
-	t_list			*next;
-}					t_list;
+	int					fd;
+	char				save[BUFF_SIZE];
+	struct s_listfd		*next;
+}						t_listfd;
 
 int					get_next_line(int const fd, char **line);
 #endif
