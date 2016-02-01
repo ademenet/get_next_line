@@ -20,12 +20,13 @@
 # include <stdlib.h>
 # include "libft/libft.h"
 
-typedef struct			s_listfd
+/*typedef struct			s_listfd
 {
 	int					fd;
 	char				save[BUFF_SIZE];
+	int					i;
 	struct s_listfd		*next;
-}						t_listfd;
+}						t_listfd;*/
 
 int					get_next_line(int const fd, char **line);
 #endif

@@ -2,3 +2,5 @@ test_gnl
 *.o
 a.out
 *.swp
+*.sublime-workspace
+.DS_Store
