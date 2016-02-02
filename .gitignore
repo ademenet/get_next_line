@@ -1,6 +1,7 @@
 test_gnl
 *.o
 a.out
+a.out.dSYM
 *.swp
 *.sublime-workspace
 .DS_Store
