@@ -6,7 +6,7 @@
 /*   By: ademenet <ademenet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/21 09:53:51 by ademenet          #+#    #+#             */
-/*   Updated: 2016/02/02 18:52:37 by ademenet         ###   ########.fr       */
+/*   Updated: 2016/02/02 19:05:58 by ademenet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ static unsigned int			line_length(char *tmp)
 // le static ne fonctionne pas
 int							get_next_line(int const fd, char **line)
 {
-	static char		**tmp;
 	char			buf[BUFF_SIZE + 1];
+	static char		**tmp;
 	int				read_val;
 
 	if (fd < 0 || BUFF_SIZE <= 0 || !line)
@@ -48,7 +48,7 @@ int							get_next_line(int const fd, char **line)
 	}
 	ft_putstr("tmp[fd] avant la boucle:"); ft_putstr(tmp[fd]); ft_putstr("\n"); getchar();
 
-	while (!(ft_strchr(buf, '\n')) && (read_val = read(fd, buf, BUFF_SIZE)) > 0)
+	while (!(ft_strchr(tmp[fd], '\n')) && (read_val = read(fd, buf, BUFF_SIZE)) > 0)
 	{
 		buf[read_val] = '\0';
 		ft_putstr("tmp[fd] avant le join:"); ft_putstr(tmp[fd]); ft_putstr("\n"); getchar();
