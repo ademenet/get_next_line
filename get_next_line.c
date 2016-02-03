@@ -6,7 +6,7 @@
 /*   By: ademenet <ademenet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/21 09:53:51 by ademenet          #+#    #+#             */
-/*   Updated: 2016/02/03 18:06:52 by ademenet         ###   ########.fr       */
+/*   Updated: 2016/02/03 18:25:00 by ademenet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,17 +109,22 @@ int					get_next_line(int const fd, char **line)
 	while (!(ft_strchr(listfd->tmp, '\n')) && (read_val = read(fd, buf, BUFF_SIZE)) > 0)
 	{
 		buf[read_val] = '\0';
+		ft_putstr("Valeur de listfd->tmp dans la boucle1:\t\t"); ft_putstr(listfd->tmp); getchar(); //TEST
+
 		listfd->tmp = ft_strjoin(listfd->tmp, buf);
 		// REVIEW voir sil faut free ou pas ici, car join ne free pas
 	}
 	*line = ft_strsub(listfd->tmp, 0, line_length(listfd->tmp));
 	if (ft_strchr(listfd->tmp, '\n'))
 	{
-		listfd->tmp = ft_strcpy(listfd->tmp, ft_strchr(listfd->tmp, '\n') + 1);
+		ft_putstr("Valeur de listfd->tmp dans le if1:\t\t"); ft_putstr(listfd->tmp); getchar(); //TEST
+		// TODO faire en sorte que je ne garde que le reste qui se trouve apres le \n
+		listfd->tmp = ft_strcpy(listfd->tmp, ft_strchr(listfd->tmp, '\n'));
+		ft_putstr("Valeur de listfd->tmp dans le if2:\t\t"); ft_putstr(listfd->tmp); getchar(); //TEST
 		// REVIEW strcpy pas bon pour les leaks comment free ?
 	}
-	ft_putstr("Valeur de listfd->tmp:\t"); ft_putstr(listfd->tmp); getchar(); //TEST
-	ft_putstr("Valeur de read_val:\t"); ft_putnbr(read_val); getchar(); // TEST
+	ft_putstr("Valeur de listfd->tmp:\t\t"); ft_putstr(listfd->tmp); getchar(); //TEST
+	ft_putstr("Valeur de read_val:\t\t"); ft_putnbr(read_val); getchar(); // TEST
 	*line = listfd->tmp;
 	return (read_val ? 1 : 0);
 	/*
