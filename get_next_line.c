@@ -6,7 +6,7 @@
 /*   By: ademenet <ademenet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/21 09:53:51 by ademenet          #+#    #+#             */
-/*   Updated: 2016/02/03 17:20:05 by ademenet         ###   ########.fr       */
+/*   Updated: 2016/02/03 18:06:52 by ademenet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,6 @@ int					get_next_line(int const fd, char **line)
 
 	if (fd < 0 || BUFF_SIZE <= 0 || !line || read(fd, buf, 0) < 0)
 		return (-1);
-	// Je regarde si list_fd existe et je traite
 	if ((listfd = ft_listfd(listfd, fd)) == NULL)
 		return (-1);
 	while (!(ft_strchr(listfd->tmp, '\n')) && (read_val = read(fd, buf, BUFF_SIZE)) > 0)
@@ -119,5 +118,15 @@ int					get_next_line(int const fd, char **line)
 		listfd->tmp = ft_strcpy(listfd->tmp, ft_strchr(listfd->tmp, '\n') + 1);
 		// REVIEW strcpy pas bon pour les leaks comment free ?
 	}
+	ft_putstr("Valeur de listfd->tmp:\t"); ft_putstr(listfd->tmp); getchar(); //TEST
+	ft_putstr("Valeur de read_val:\t"); ft_putnbr(read_val); getchar(); // TEST
+	*line = listfd->tmp;
 	return (read_val ? 1 : 0);
+	/*
+	 * if (read_val == 0)
+	 * {
+	 *
+	 * }
+	 * return (0);
+	 */
 }
