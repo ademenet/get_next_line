@@ -6,13 +6,13 @@
 /*   By: ademenet <ademenet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/21 09:54:44 by ademenet          #+#    #+#             */
-/*   Updated: 2016/02/03 18:18:13 by ademenet         ###   ########.fr       */
+/*   Updated: 2016/02/04 09:49:32 by ademenet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
-# define BUFF_SIZE 1
+# define BUFF_SIZE 5
 
 # include <sys/types.h>
 # include <sys/uio.h>
@@ -27,5 +27,5 @@ typedef struct			s_listfd
     struct s_listfd		*next;
 }						t_listfd;
 
-int					get_next_line(int const fd, char **line);
+int                     get_next_line(int const fd, char **line);
 #endif

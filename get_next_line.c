@@ -6,7 +6,7 @@
 /*   By: ademenet <ademenet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/21 09:53:51 by ademenet          #+#    #+#             */
-/*   Updated: 2016/02/03 18:25:00 by ademenet         ###   ########.fr       */
+/*   Updated: 2016/02/04 12:22:26 by ademenet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,16 @@
 // A SUPPRIMER
 #include <string.h>
 #include <stdio.h>
+#include <string.h>
 
 t_listfd		*ft_listfd(t_listfd *list_fst, int fd)
 {
 	t_listfd			*list_cur;
 
+	ft_putstr("=====DEBUT FONCTION LISTFD====="); getchar();
 	if (!list_fst)
 	{
+		ft_putstr("SI LISTFD N'EXISTE PAS..."); getchar();
 		if ((list_fst = (t_listfd*)malloc(sizeof(t_listfd))) == NULL)
 			return (NULL);
 		list_fst->fd = fd;
@@ -29,12 +32,14 @@ t_listfd		*ft_listfd(t_listfd *list_fst, int fd)
 		return (list_fst);
 	}
 	list_cur = list_fst;
+	ft_putstr("JE CHERCHE SI LE FD EXISTE..."); getchar();
 	while (list_cur->next != NULL)
 	{
 		if (list_cur->fd == fd)
 			return (list_cur);
 		list_cur = list_cur->next;
 	}
+	ft_putstr("JE CREE SI J'AI PAS DE FD CORRESPONDANT"); getchar();
 	// TODO: Verifier lassignation de list_cur et list_fst
 	if ((list_cur = (t_listfd*)malloc(sizeof(t_listfd))) == NULL)
 		return (NULL);
@@ -44,57 +49,27 @@ t_listfd		*ft_listfd(t_listfd *list_fst, int fd)
 	return (list_fst);
 }
 
-/*
- * static char			*ft_join_current(t_listfd *listfd, char *buf)
- * {
- * 	int					i;
- *
- * 	i = 0;
- * 	line[i] = ft_strjoin();
- * }
- */
+static unsigned int			line_length(char *tmp)
+{
+	unsigned int	i;
 
-/*
- * static int			ft_read(t_listfd *listfd, char **line)
- * {
- * 	int					i;
- * 	int					ret;
- * 	char				buf[BUFF_SIZE];
- * 	char				tmp;
- *
- * 	ft_memset(buf, '\0', BUFF_SIZE);
- * 	if (ft_strlen(listfd->tmp) > 0)
- * 	{
- * 		if ((tmp = (char*)malloc(sizeof(char) * ft_strlen(listfd->tmp)))
- * 				== NULL)
- * 			return (-1);
- * 		ft_strcpy(tmp, listfd->tmp);
- * 	}
- * 	i = 0;
- * 	while ((ret = read(listfd->fd, buf, BUFF_SIZE))  != -1)
- * 	{
- * 		//CA NE VAS PAS DU TOUT !
- * 		while (buf[i] != '\n')
- * 		{
- * 			line[i] = ft_strjoin(tmp, buf);
- * 			if ((tmp = (char*)malloc(sizeof(char) * ft_strlen(line[i])))
- * 					== NULL)
- * 				return (-1);
- * 			//coller buf
- * 		}
- * 	}
- * 	return (-1);
- * }
- */
- static unsigned int			line_length(char *tmp)
- {
- 	unsigned int	i;
+	i = 0;
+	while (tmp[i] != '\n' && tmp[i] != '\0')
+		i++;
+	return (i);
+}
 
- 	i = 0;
- 	while (tmp[i] != '\n' && tmp[i] != '\0')
- 		i++;
- 	return (i);
- }
+static char 				*ft_realloc(char *ptr)
+{
+	char			*tmp;
+	char			*tmp_nxt_line;
+
+	tmp_nxt_line = ptr + line_length(ptr) + 1;
+	tmp = ft_strnew(ft_strlen(tmp_nxt_line));
+	tmp = ft_strcpy(tmp, tmp_nxt_line);
+	free(ptr);
+	return (tmp);
+}
 
 int					get_next_line(int const fd, char **line)
 {
@@ -102,15 +77,18 @@ int					get_next_line(int const fd, char **line)
 	char				buf[BUFF_SIZE + 1];
 	int					read_val;
 
+
+	ft_putstr("=====DEBUT FONCTION GNL====="); getchar();
 	if (fd < 0 || BUFF_SIZE <= 0 || !line || read(fd, buf, 0) < 0)
 		return (-1);
 	if ((listfd = ft_listfd(listfd, fd)) == NULL)
 		return (-1);
+	ft_putstr("Valeur de fd en debut de fonction:\t\t"); ft_putnbr(fd); getchar();
+	ft_putstr("Valeur de listfd->tmp en debut de fonction:\t"); ft_putstr(listfd->tmp); getchar(); // TEST
 	while (!(ft_strchr(listfd->tmp, '\n')) && (read_val = read(fd, buf, BUFF_SIZE)) > 0)
 	{
 		buf[read_val] = '\0';
 		ft_putstr("Valeur de listfd->tmp dans la boucle1:\t\t"); ft_putstr(listfd->tmp); getchar(); //TEST
-
 		listfd->tmp = ft_strjoin(listfd->tmp, buf);
 		// REVIEW voir sil faut free ou pas ici, car join ne free pas
 	}
@@ -118,14 +96,12 @@ int					get_next_line(int const fd, char **line)
 	if (ft_strchr(listfd->tmp, '\n'))
 	{
 		ft_putstr("Valeur de listfd->tmp dans le if1:\t\t"); ft_putstr(listfd->tmp); getchar(); //TEST
-		// TODO faire en sorte que je ne garde que le reste qui se trouve apres le \n
-		listfd->tmp = ft_strcpy(listfd->tmp, ft_strchr(listfd->tmp, '\n'));
+		listfd->tmp = ft_realloc(listfd->tmp);
 		ft_putstr("Valeur de listfd->tmp dans le if2:\t\t"); ft_putstr(listfd->tmp); getchar(); //TEST
 		// REVIEW strcpy pas bon pour les leaks comment free ?
 	}
-	ft_putstr("Valeur de listfd->tmp:\t\t"); ft_putstr(listfd->tmp); getchar(); //TEST
-	ft_putstr("Valeur de read_val:\t\t"); ft_putnbr(read_val); getchar(); // TEST
-	*line = listfd->tmp;
+	ft_putstr("Valeur de read_val:\t\t\t\t"); ft_putnbr(read_val); getchar(); // TEST
+	ft_putstr("Valeur de listfd->tmp en fin de fonction:\t"); ft_putstr(listfd->tmp); getchar(); //TEST
 	return (read_val ? 1 : 0);
 	/*
 	 * if (read_val == 0)
