@@ -6,7 +6,7 @@
 /*   By: ademenet <ademenet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/21 09:53:51 by ademenet          #+#    #+#             */
-/*   Updated: 2016/02/04 18:58:50 by ademenet         ###   ########.fr       */
+/*   Updated: 2016/02/04 19:09:02 by ademenet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,20 +56,22 @@ static char					*ft_realloc(char *ptr)
 	return (tmp);
 }
 
-static int					ft_check_line(char *tmp)
-{
-	if (ft_strchr(tmp, '\n'))
-	{
-		tmp = ft_realloc(tmp);
-		return (1);
-	}
-	if (ft_strlen(tmp) > 0)
-	{
-		tmp = ft_realloc(tmp);
-		return (1);
-	}
-	return (0);
-}
+/*
+ * static int					ft_check_line(char *tmp)
+ * {
+ * 	if (ft_strchr(tmp, '\n'))
+ * 	{
+ * 		tmp = ft_realloc(tmp);
+ * 		return (1);
+ * 	}
+ * 	if (ft_strlen(tmp) > 0)
+ * 	{
+ * 		tmp = ft_realloc(tmp);
+ * 		return (1);
+ * 	}
+ * 	return (0);
+ * }
+ */
 
 int							get_next_line(int const fd, char **line)
 {
@@ -89,5 +91,16 @@ int							get_next_line(int const fd, char **line)
 		listfd->tmp = ft_strjoin(listfd->tmp, buf);
 	}
 	*line = ft_strsub(listfd->tmp, 0, line_length(listfd->tmp));
-	return (ft_check_line(listfd->tmp));
+	// return (ft_check_line(listfd->tmp)); // Solution coupe
+	if (ft_strchr(listfd->tmp, '\n'))
+	{
+		listfd->tmp = ft_realloc(listfd->tmp);
+		return (1);
+	}
+	if (ft_strlen(listfd->tmp) > 0)
+	{
+		listfd->tmp = ft_realloc(listfd->tmp);
+		return (1);
+	}
+	return (0);
 }
