@@ -3,92 +3,80 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ademenet <ademenet@student.42.fr>          +#+  +:+       +#+        */
+/*   By: alain <alain@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/21 09:53:51 by ademenet          #+#    #+#             */
-/*   Updated: 2016/02/04 19:09:02 by ademenet         ###   ########.fr       */
+/*   Updated: 2016/02/07 22:24:09 by alain            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include "libft/libft.h"
 
-t_listfd					*ft_listfd(t_listfd *list_fst, int fd)
+static t_list			*ft_listfd(t_list **list_fst, int fd)
 {
-	t_listfd			*list_cur;
+	t_list			*list_cur;
 
-	list_cur = list_fst;
+	list_cur = *list_fst;
 	if (list_cur)
 	{
-		while (list_cur->next != NULL)
+		while (list_cur)
 		{
-			if (list_cur->fd == fd)
+			if ((int)list_cur->content_size == fd)
 				return (list_cur);
 			list_cur = list_cur->next;
 		}
 	}
-	if ((list_cur = (t_listfd*)malloc(sizeof(t_listfd))) == NULL)
-		return (NULL);
-	list_cur->next = list_fst;
-	list_cur->tmp = ft_strnew(0);
-	list_fst = list_cur;
-	return (list_fst);
+	lis_cur = ft_lstnew("\0", 1);
+	list_cur->content_size = fd;
+	ft_lstadd(list_fst, list_cur);
+	return (list_cur);
 }
 
-static unsigned int			line_length(char *tmp)
+static char				*ft_strnjoin(const char *s1, const char *s2, size_t len)
 {
-	unsigned int	i;
+	char	*str;
+	int		nbr;
+	char	*d;
 
-	i = 0;
-	while (tmp[i] != '\n' && tmp[i] != '\0')
-		i++;
-	return (i);
+	nbr = ft_strlen(s1) + ++len;
+	str = ft_strnew(nbr);
+	d = str;
+	while (*s1)
+		*str++ = *s1++;
+	while (*s2 && --len > 0)
+		*str++ = *s2++;
+	*str = '\0';
+	return (str - (str - d));
 }
 
-static char					*ft_realloc(char *ptr)
+static char			*ft_jointmp(char *tmp, char* buf, int read_val)
 {
-	char			*tmp;
-	char			*tmp_nxt_line;
+	char	*ptr;
 
-	tmp_nxt_line = ptr + line_length(ptr) + 1;
-	tmp = ft_strnew(ft_strlen(tmp_nxt_line));
-	tmp = ft_strcpy(tmp, tmp_nxt_line);
+	ptr = tmp;
+	tmp = ft_strnjoin(tmp, buf, read_val);
 	free(ptr);
 	return (tmp);
 }
 
-/*
- * static int					ft_check_line(char *tmp)
- * {
- * 	if (ft_strchr(tmp, '\n'))
- * 	{
- * 		tmp = ft_realloc(tmp);
- * 		return (1);
- * 	}
- * 	if (ft_strlen(tmp) > 0)
- * 	{
- * 		tmp = ft_realloc(tmp);
- * 		return (1);
- * 	}
- * 	return (0);
- * }
- */
-
 int							get_next_line(int const fd, char **line)
 {
-	static t_listfd		*listfd = NULL;
-	t_listfd			*listfd_fst;
+	static t_list		*listfd = NULL;
+	t_list				*listfd_fst;
 	char				buf[BUFF_SIZE + 1];
+	char				*ptr;
 	int					read_val;
 
 	if (fd < 0 || BUFF_SIZE <= 0 || !line || read(fd, buf, 0) < 0)
 		return (-1);
 	listfd_fst = listfd ? listfd : NULL;
-	listfd = ft_listfd(listfd_fst, fd);
-	while (!(ft_strchr(listfd->tmp, '\n')) &&
+	listfd = ft_listfd(&listfd_fst, fd);
+	while (!(ft_strchr(listfd->content, '\n')) &&
 			(read_val = read(fd, buf, BUFF_SIZE)) > 0)
 	{
 		buf[read_val] = '\0';
-		listfd->tmp = ft_strjoin(listfd->tmp, buf);
+		listfd->tmp = ft_strjoin(listfd->content, buf);
 	}
 	*line = ft_strsub(listfd->tmp, 0, line_length(listfd->tmp));
 	// return (ft_check_line(listfd->tmp)); // Solution coupe
