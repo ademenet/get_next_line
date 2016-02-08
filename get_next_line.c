@@ -6,7 +6,7 @@
 /*   By: ademenet <ademenet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/21 09:53:51 by ademenet          #+#    #+#             */
-/*   Updated: 2016/02/08 09:32:54 by ademenet         ###   ########.fr       */
+/*   Updated: 2016/02/08 10:21:01 by ademenet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 static t_list			*ft_listfd(t_list **list_fst, int fd)
 {
-	t_list			*list_cur;
+	t_list				*list_cur;
 
 	list_cur = *list_fst;
 	if (list_cur)
@@ -35,9 +35,9 @@ static t_list			*ft_listfd(t_list **list_fst, int fd)
 
 static char				*ft_strnjoin(const char *s1, const char *s2, size_t len)
 {
-	char	*str;
-	int		nbr;
-	char	*d;
+	char				*str;
+	int					nbr;
+	char				*d;
 
 	nbr = ft_strlen(s1) + ++len;
 	str = ft_strnew(nbr);
@@ -50,9 +50,9 @@ static char				*ft_strnjoin(const char *s1, const char *s2, size_t len)
 	return (str - (str - d));
 }
 
-static char			*ft_joincontent(char *tmp, char* buf, int read_val)
+static char				*ft_joincontent(char *tmp, char* buf, int read_val)
 {
-	char	*ptr;
+	char				*ptr;
 
 	ptr = tmp;
 	tmp = ft_strnjoin(tmp, buf, read_val);
@@ -60,7 +60,7 @@ static char			*ft_joincontent(char *tmp, char* buf, int read_val)
 	return (tmp);
 }
 
-int							get_next_line(int const fd, char **line)
+int						get_next_line(int const fd, char **line)
 {
 	static t_list		*l = NULL;
 	t_list				*l_fst;
