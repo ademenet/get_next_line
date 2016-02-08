@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alain <alain@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ademenet <ademenet@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/21 09:53:51 by ademenet          #+#    #+#             */
-/*   Updated: 2016/02/07 22:24:09 by alain            ###   ########.fr       */
+/*   Updated: 2016/02/08 09:32:54 by ademenet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static t_list			*ft_listfd(t_list **list_fst, int fd)
 			list_cur = list_cur->next;
 		}
 	}
-	lis_cur = ft_lstnew("\0", 1);
+	list_cur = ft_lstnew("\0", 1);
 	list_cur->content_size = fd;
 	ft_lstadd(list_fst, list_cur);
 	return (list_cur);
@@ -50,7 +50,7 @@ static char				*ft_strnjoin(const char *s1, const char *s2, size_t len)
 	return (str - (str - d));
 }
 
-static char			*ft_jointmp(char *tmp, char* buf, int read_val)
+static char			*ft_joincontent(char *tmp, char* buf, int read_val)
 {
 	char	*ptr;
 
@@ -62,33 +62,29 @@ static char			*ft_jointmp(char *tmp, char* buf, int read_val)
 
 int							get_next_line(int const fd, char **line)
 {
-	static t_list		*listfd = NULL;
-	t_list				*listfd_fst;
+	static t_list		*l = NULL;
+	t_list				*l_fst;
 	char				buf[BUFF_SIZE + 1];
 	char				*ptr;
-	int					read_val;
+	int					r;
 
 	if (fd < 0 || BUFF_SIZE <= 0 || !line || read(fd, buf, 0) < 0)
 		return (-1);
-	listfd_fst = listfd ? listfd : NULL;
-	listfd = ft_listfd(&listfd_fst, fd);
-	while (!(ft_strchr(listfd->content, '\n')) &&
-			(read_val = read(fd, buf, BUFF_SIZE)) > 0)
-	{
-		buf[read_val] = '\0';
-		listfd->tmp = ft_strjoin(listfd->content, buf);
-	}
-	*line = ft_strsub(listfd->tmp, 0, line_length(listfd->tmp));
-	// return (ft_check_line(listfd->tmp)); // Solution coupe
-	if (ft_strchr(listfd->tmp, '\n'))
-	{
-		listfd->tmp = ft_realloc(listfd->tmp);
+	l_fst = l ? l : NULL;
+	l = ft_listfd(&l_fst, fd);
+	while (!(ft_strchr(l->content, '\n')) && (r = read(fd, buf, BUFF_SIZE)) > 0)
+		l->content = ft_joincontent(l->content, buf, r);
+	r = 0;
+	while (((char*)l->content)[r] && ((char*)l->content)[r] != '\n')
+		r++;
+	*line = ft_strsub(l->content, 0, r);
+	if (((char*)l->content)[r] == '\n')
+		r++;
+	ptr = l->content;
+	l->content = ft_strdup(l->content + r);
+	free(ptr);
+	l = l_fst;
+	if (r > 0)
 		return (1);
-	}
-	if (ft_strlen(listfd->tmp) > 0)
-	{
-		listfd->tmp = ft_realloc(listfd->tmp);
-		return (1);
-	}
 	return (0);
 }
